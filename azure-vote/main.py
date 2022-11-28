@@ -33,24 +33,24 @@ config_integration.trace_integrations(['logging'])
 config_integration.trace_integrations(['requests'])
 # Standard Logging
 logger = logging.getLogger(__name__)
-handler = AzureLogHandler(connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f')
+handler = AzureLogHandler(connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 # Logging custom Events 
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/'))
 # Set the logging level
 logger.setLevel(logging.INFO)
 
 # Metrics
 exporter = metrics_exporter.new_metrics_exporter(
 enable_standard_metrics=True,
-connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f')
+connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/')
 view_manager.register_exporter(exporter)
 
 # Tracing
 tracer = Tracer(
  exporter=AzureExporter(
-     connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f'),
+     connection_string='InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/'),
  sampler=ProbabilitySampler(1.0),
 )
 
@@ -59,7 +59,7 @@ app = Flask(__name__)
 # Requests
 middleware = FlaskMiddleware(
  app,
- exporter=AzureExporter(connection_string="InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f"),
+ exporter=AzureExporter(connection_string="InstrumentationKey=8d03315e-2d53-4149-a0fd-94fe0a85b99f;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://westus.livediagnostics.monitor.azure.com/"),
  sampler=ProbabilitySampler(rate=1.0)
 )
 
